@@ -26,46 +26,46 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.Welcomelbl = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.lblWelcome = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
         font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.Welcomelbl.setFont(font)
-        self.Welcomelbl.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.Welcomelbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.Welcomelbl.setObjectName("Welcomelbl")
-        self.verticalLayout.addWidget(self.Welcomelbl)
-        self.tab1infotxt = QtWidgets.QTextBrowser(self.verticalLayoutWidget)
+        self.lblWelcome.setFont(font)
+        self.lblWelcome.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.lblWelcome.setAlignment(QtCore.Qt.AlignCenter)
+        self.lblWelcome.setObjectName("lblWelcome")
+        self.verticalLayout.addWidget(self.lblWelcome)
+        self.txtTab1info = QtWidgets.QTextBrowser(self.verticalLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tab1infotxt.sizePolicy().hasHeightForWidth())
-        self.tab1infotxt.setSizePolicy(sizePolicy)
-        self.tab1infotxt.setObjectName("tab1infotxt")
-        self.verticalLayout.addWidget(self.tab1infotxt)
-        self.tab2infotxt = QtWidgets.QTextBrowser(self.verticalLayoutWidget)
+        sizePolicy.setHeightForWidth(self.txtTab1info.sizePolicy().hasHeightForWidth())
+        self.txtTab1info.setSizePolicy(sizePolicy)
+        self.txtTab1info.setObjectName("txtTab1info")
+        self.verticalLayout.addWidget(self.txtTab1info)
+        self.txtTab2info = QtWidgets.QTextBrowser(self.verticalLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tab2infotxt.sizePolicy().hasHeightForWidth())
-        self.tab2infotxt.setSizePolicy(sizePolicy)
-        self.tab2infotxt.setObjectName("tab2infotxt")
-        self.verticalLayout.addWidget(self.tab2infotxt)
-        self.enterBtn = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        sizePolicy.setHeightForWidth(self.txtTab2info.sizePolicy().hasHeightForWidth())
+        self.txtTab2info.setSizePolicy(sizePolicy)
+        self.txtTab2info.setObjectName("txtTab2info")
+        self.verticalLayout.addWidget(self.txtTab2info)
+        self.btnEnter = QtWidgets.QPushButton(self.verticalLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.enterBtn.sizePolicy().hasHeightForWidth())
-        self.enterBtn.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.btnEnter.sizePolicy().hasHeightForWidth())
+        self.btnEnter.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
-        self.enterBtn.setFont(font)
-        self.enterBtn.setObjectName("enterBtn")
-        self.verticalLayout.addWidget(self.enterBtn)
+        self.btnEnter.setFont(font)
+        self.btnEnter.setObjectName("btnEnter")
+        self.verticalLayout.addWidget(self.btnEnter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 836, 22))
@@ -81,21 +81,21 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "WelcomeWindow"))
-        self.Welcomelbl.setText(_translate("MainWindow", "Welcome to our Attendance Tracker"))
-        self.tab1infotxt.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.lblWelcome.setText(_translate("MainWindow", "Welcome to our Attendance Tracker"))
+        self.txtTab1info.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.875pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Tab 1:</span> </p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Allows teachers to selected the specific class, a calendar to select a date, and a checkbox for if the student is &quot;Present&quot; or &quot;Absent&quot;. There will be a combo box allowing the teacher to select or type the students ID. </span></p></body></html>"))
-        self.tab2infotxt.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Allows teachers to input the students first and last name, ID, CRN, course name, course start and end time, date, and whether the student was present or absent.</span></p></body></html>"))
+        self.txtTab2info.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.875pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; font-weight:600;\">Tab 2:</span><span style=\" font-size:16pt;\"> </span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Allows teachers to see a final report of the total information. In this tab there are filters, this includes: students name, class, month, and semester. Mulitple filters can be applied as well. There will be a dynamic total of students attendance that updates automatically based on the selected filters.  </span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Allows teachers to see a final report of the total information. In this tab there are filters, this includes: sort by day/week/month, students ID, CRN, and course name. Mulitple filters can be applied as well. There will be a dynamic total of students attendance that updates automatically based on the selected filters.  </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\"><br /></span></p></body></html>"))
-        self.enterBtn.setText(_translate("MainWindow", "Click to Enter Tracker"))
+        self.btnEnter.setText(_translate("MainWindow", "Click to Enter Tracker"))
 
 
 if __name__ == "__main__":
