@@ -10,6 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import InputPopup
+import mysql.connector
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
+
 
 ###################################################################
 #                                                                 #
@@ -215,11 +218,20 @@ class Ui_Dialog(object):
 
      ####################      End UI Generation   ########################
 
+
+
+
     def initialSetup(self):
         self.SetUpEventsTab1()
+        self.SetUpEventsTab2()
+        self.setupDatabase()
+
+        self.refreshTbl1()
+        self.refreshTbl2()
 
 
-       
+
+
 
     #########################################################
     #                                                       #
@@ -230,8 +242,6 @@ class Ui_Dialog(object):
     def SetUpEventsTab1(self):
          #Input Info Button Intialization
         self.btnInfo.clicked.connect(self.btnInfo_clicked) 
-
-
     
     # Input Info button is clicked
     def btnInfo_clicked(self): 
@@ -245,17 +255,25 @@ class Ui_Dialog(object):
             rowCount = self.tblAttendance.rowCount()
             self.tblAttendance.insertRow(rowCount) 
 
-        # Set the values in the table on tab 1
-        self.tblAttendance.setItem(rowCount, 0, QtWidgets.QTableWidgetItem(listValues[0]))  # Student ID
-        self.tblAttendance.setItem(rowCount, 1, QtWidgets.QTableWidgetItem(listValues[4]))  # CRN
-        self.tblAttendance.setItem(rowCount, 2, QtWidgets.QTableWidgetItem(listValues[7]))  # Date
-        self.tblAttendance.setItem(rowCount, 3, QtWidgets.QTableWidgetItem(listValues[6]))  # Attendance (Present/Absent)
+            student_id = listValues[0]
+            student_first = listValues[1]
+            student_last = listValues[2]
+            course_name = listValues[3]
+            crn = listValues[4]
+            start_end_time = listValues[5]
+            attendance = listValues[6]
+            date_attendance = listValues[7]
+
+            # Insert data into the database (see functions in database section)
+            self.insert_students((student_id, student_first, student_last))
+            self.insert_courses(crn, course_name, start_end_time)
+            self.insert_attendance((student_id, crn, date_attendance, attendance))
 
 
 
-
-
-
+            #insert the into tables 
+            self.refreshTbl1()
+            self.refreshTbl2()
 
 
 
@@ -266,16 +284,146 @@ class Ui_Dialog(object):
     #                   Events FOR TAB 2                    #
     #                                                       #
     #########################################################
+            
+
+    def SetUpEventsTab2(self):
+        pass
+
+        # Connect the submit button to everything ???????
+    
+
+    #self.refreshTbl2() 
 
 
-  
 
 
 
 
+#########################################################################
+#                                                                       #
+#                              DATABASE                                 #
+#                                                                       #
+#########################################################################
+            
+
+            
+        
+    def setupDatabase(self):
+        self.connect()
+        self.refreshTbl1()
+        self.refreshTbl2()
+        
+
+
+#############################################################################
+#                           CHANGE YOUR PASSWORD                            #   
+#############################################################################
+    def connect(self):                                                      #
+        self.cnx = mysql.connector.connect(user = 'root',                   #
+                                        password = 'quinnfricko',           #
+                                        host = '127.0.0.1',                 #    
+                                        database = 'AttendanceTracker')     #   
+#############################################################################
+
+    #REFRESH TABLE 1
+    def refreshTbl1(self):
+        
+        self.tblAttendance.setRowCount(0)
+        cursor = self.cnx.cursor()
+
+        query = """SELECT a.Student_ID, a.CRN, a.Date_of_attendance, a.Attended
+                FROM attendance a"""
+        cursor.execute(query)
+
+        #insert vals into table1 in database
+        for (student_id, crn, date_attended, attended) in cursor:
+            rowCount = self.tblAttendance.rowCount()
+            self.tblAttendance.insertRow(rowCount)
+            self.tblAttendance.setItem(rowCount, 0, QTableWidgetItem(str(student_id)))
+            self.tblAttendance.setItem(rowCount, 1, QTableWidgetItem(str(crn)))
+            self.tblAttendance.setItem(rowCount, 2, QTableWidgetItem(date_attended.strftime("%Y-%m-%d")))
+            self.tblAttendance.setItem(rowCount, 3, QTableWidgetItem(attended))
+
+        cursor.close()
+
+
+    #REFRESH TABLE 2
+    def refreshTbl2(self):
+        self.tblAttendance_2.setRowCount(0)
+
+        cursor = self.cnx.cursor()
+        query = """
+            SELECT s.Student_ID, s.Student_First_name, s.Student_last_name,c.CRN,
+                c.course_name,  a.Date_of_attendance,  c.start_end_time, a.Attended
+            FROM attendance a
+            left JOIN students s ON a.Student_ID = s.Student_ID
+            Left JOIN courses c ON a.CRN = c.CRN """
+        
+        cursor.execute(query)
+
+        #insert vals into table2 in database
+        for (student_id, first_name, last_name, crn, course_name, date_attended, start_end_time, attended) in cursor:
+            rowCount = self.tblAttendance_2.rowCount()
+            self.tblAttendance_2.insertRow(rowCount)
+            self.tblAttendance_2.setItem(rowCount, 0, QTableWidgetItem(str(student_id)))
+            self.tblAttendance_2.setItem(rowCount, 1, QTableWidgetItem(first_name))
+            self.tblAttendance_2.setItem(rowCount, 2, QTableWidgetItem(last_name))
+            self.tblAttendance_2.setItem(rowCount, 3, QTableWidgetItem(str(crn)))
+            self.tblAttendance_2.setItem(rowCount, 4, QTableWidgetItem(course_name))
+            self.tblAttendance_2.setItem(rowCount, 5, QTableWidgetItem(date_attended.strftime("%Y-%m-%d")))
+            self.tblAttendance_2.setItem(rowCount, 6, QTableWidgetItem(start_end_time))
+            self.tblAttendance_2.setItem(rowCount, 7, QTableWidgetItem(attended))
+
+        cursor.close()
+
+
+################# INSERT INFO INTO DATABASE TABLES #######################
+        
+    def insert_students(self, student_data):
+        cursor = self.cnx.cursor()
+        query = """
+            INSERT INTO students (Student_ID, Student_First_name, Student_last_name)
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+            Student_First_name = %s,
+            Student_last_name = %s"""
+        
+        #multiple to handle the On duplicate key updatre
+        student_id, student_first, student_last = student_data
+        cursor.execute(query, (student_id, student_first, student_last, student_first, student_last))
+        self.cnx.commit()
+        cursor.close()
+
+        
+
+    def insert_courses(self, crn, course_name, start_end_time):
+        cursor = self.cnx.cursor()
+        query = """
+            INSERT INTO courses (CRN, course_name, start_end_time)
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+            course_name = %s,
+            start_end_time = %s"""
+        cursor.execute(query, (crn, course_name, start_end_time, course_name, start_end_time))
+        self.cnx.commit()
+        cursor.close()
+
+    def insert_attendance(self, attendance_data):
+        cursor = self.cnx.cursor()
+        query = """
+            INSERT INTO attendance (Student_ID, CRN, Date_of_attendance, Attended)
+            VALUES (%s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+            Attended = %s"""
+        
+        #handles the On Duplicate Key Update
+        cursor.execute(query, attendance_data + (attendance_data[3],))
+        self.cnx.commit()
+        cursor.close()
 
 
 
+        
 
 if __name__ == "__main__":
     import sys
@@ -285,3 +433,9 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+
+
+
+#Sources: 
+#On Duplicate Key Update:
+#https://mariadb.com/docs/server/reference/sql-statements/data-manipulation/inserting-loading-data/insert-on-duplicate-key-update
