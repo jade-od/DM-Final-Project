@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import InputPopup
 
 ###################################################################
 #                                                                 #
@@ -167,6 +168,12 @@ class Ui_Dialog(object):
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+    
+#-------------SET UP------------- #
+        self.initialSetup()
+#-------------------------------- #
+
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
@@ -205,6 +212,53 @@ class Ui_Dialog(object):
         self.btnSubmit.setText(_translate("Dialog", "Submit"))
         self.btnClear.setText(_translate("Dialog", "Clear"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Report"))
+
+     ####################      End UI Generation   ########################
+
+    def initialSetup(self):
+
+        #Input Info Button Intialization
+        self.btnInfo.clicked.connect(self.btnInfo_clicked) 
+
+
+    #########################################################
+    #                                                       #
+    #                   Events FOR TAB 1                    #
+    #                                                       #
+    #########################################################
+    
+    # Input Info button is clicked
+    def btnInfo_clicked(self): 
+        Dialog = QtWidgets.QDialog()
+        form = InputPopup.Ui_Dialog()
+        form.setupUi(Dialog)
+        if Dialog.exec_() == QtWidgets.QDialog.Accepted:
+            pass
+
+
+
+
+
+
+
+
+
+
+
+    #########################################################
+    #                                                       #
+    #                   Events FOR TAB 2                    #
+    #                                                       #
+    #########################################################
+
+
+  
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
