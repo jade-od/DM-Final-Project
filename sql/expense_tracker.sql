@@ -9,8 +9,7 @@ Create Table students
 
 CREATE TABLE courses 
    (CRN INT NOT NULL,
-    start_time DATETIME,
-    end_time DATETIME,
+    start_end_time varchar(20),
     course_name varchar(20),
     CONSTRAINT courses_pk PRIMARY KEY (CRN));
 
