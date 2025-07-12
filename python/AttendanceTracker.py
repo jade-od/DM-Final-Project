@@ -216,24 +216,40 @@ class Ui_Dialog(object):
      ####################      End UI Generation   ########################
 
     def initialSetup(self):
+        self.SetUpEventsTab1()
 
-        #Input Info Button Intialization
-        self.btnInfo.clicked.connect(self.btnInfo_clicked) 
 
+       
 
     #########################################################
     #                                                       #
     #                   Events FOR TAB 1                    #
     #                                                       #
     #########################################################
+        
+    def SetUpEventsTab1(self):
+         #Input Info Button Intialization
+        self.btnInfo.clicked.connect(self.btnInfo_clicked) 
+
+
     
     # Input Info button is clicked
     def btnInfo_clicked(self): 
         Dialog = QtWidgets.QDialog()
         form = InputPopup.Ui_Dialog()
-        form.setupUi(Dialog)
-        if Dialog.exec_() == QtWidgets.QDialog.Accepted:
-            pass
+        form.setupUi(Dialog, None) #None --> no need to send data when creating 
+        result = Dialog.exec_()
+
+        if result == 1 : 
+            listValues = form.getValues()
+            rowCount = self.tblAttendance.rowCount()
+            self.tblAttendance.insertRow(rowCount) 
+
+        # Set the values in the table on tab 1
+        self.tblAttendance.setItem(rowCount, 0, QtWidgets.QTableWidgetItem(listValues[0]))  # Student ID
+        self.tblAttendance.setItem(rowCount, 1, QtWidgets.QTableWidgetItem(listValues[4]))  # CRN
+        self.tblAttendance.setItem(rowCount, 2, QtWidgets.QTableWidgetItem(listValues[7]))  # Date
+        self.tblAttendance.setItem(rowCount, 3, QtWidgets.QTableWidgetItem(listValues[6]))  # Attendance (Present/Absent)
 
 
 

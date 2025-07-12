@@ -11,8 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
+##########################################################################
+#                                                                        #
+#                        UI Generation                                   #
+#                                                                        #
+##########################################################################
+
 class Ui_Dialog(object):
-    def setupUi(self, Dialog):
+    def setupUi(self, Dialog,listValues):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 300)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
@@ -83,6 +89,11 @@ class Ui_Dialog(object):
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+
+        #Update UI here
+        self.listValues = listValues
+        self.initialSetUp()
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
@@ -99,11 +110,55 @@ class Ui_Dialog(object):
         self.LblHeader.setText(_translate("Dialog", "Input Attendance Information"))
 
 
+####################      End UI Generation   ########################
+        
+
+    def initialSetUp(self):
+        self.setupCombobox()
+        self.setValues()
+
+    def setupCombobox(self):
+        self.cmbAttendance.addItem("Yes")
+        self.cmbAttendance.addItem("No")
+
+    def setValues(self): 
+        if self.listValues == None :
+            return
+        self.txtStudentID.setText(self.listValues[0])
+        self.txtFirst.setText(self.listValues[1])
+        self.txtLast.setText(self.listValues[2])
+        self.txtCourseName.setText(self.listValues[3])
+        self.txtCRN.setText(self.listValues[4])
+        self.txtTime.setText(self.listValues[5])
+        self.cmbAttendance.setCurrentText(self.listValues[6])
+        self.dateEdit.setDate(QtCore.QDate.fromString(self.listValues[7], "yyyy-MM-dd"))
+    
+
+    def getValues(self):
+        listResult =[]
+        listResult.append(self.txtStudentID.text())
+        listResult.append(self.txtFirst.text())
+        listResult.append(self.txtLast.text())
+        listResult.append(self.txtCourseName.text())  
+        listResult.append(self.txtCRN.text())
+        listResult.append(self.txtTime.text())
+        listResult.append(self.cmbAttendance.currentText())
+        listResult.append(self.dateEdit.date().toString("yyyy-MM-dd"))
+        return listResult
+    
+        
+
+
+        
+        
+
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
-    ui.setupUi(Dialog)
+    ui.setupUi(Dialog, None)
     Dialog.show()
     sys.exit(app.exec_())
