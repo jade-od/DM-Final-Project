@@ -10,6 +10,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+###################################################################
+#                                                                 #
+#                       UI Generation                             #
+#                                                                 #
+###################################################################
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
