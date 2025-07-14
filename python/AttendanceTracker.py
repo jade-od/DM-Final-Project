@@ -150,6 +150,7 @@ class Ui_Dialog(object):
             self.insert_attendance((values[0], values[4], values[7], values[6]))
             self.refreshTbl1()
             self.refreshTbl2()
+            self.populateFilters()
 
     #########################################################
     #                   Events FOR TAB 2                    #
@@ -202,10 +203,17 @@ class Ui_Dialog(object):
             self.tblAttendance_2.insertRow(rowCount)
             for col, val in enumerate(row):
                 self.tblAttendance_2.setItem(rowCount, col, QTableWidgetItem(str(val)))
-            if row[7].lower() == "present":
-                total_present += 1
-            elif row[7].lower() == "absent":
-                total_absent += 1
+
+            if row[7] and isinstance(row[7], str):
+                attended_value = row[7].strip().lower()
+                if attended_value in ["present", "yes"]:
+                    total_present += 1
+                elif attended_value in ["absent", "no"]:
+                    total_absent += 1
+
+
+
+
 
         self.totPresentLineEdit.setText(str(total_present))
         self.totAbsentlineEdit.setText(str(total_absent))
