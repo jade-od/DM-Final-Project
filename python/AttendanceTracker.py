@@ -47,6 +47,20 @@ class Ui_Dialog(object):
             "Student ID", "Student First", "Student Last", "CRN",
             "Course Name", "Date", "Start/End Time", "Attendance"])
 
+        # Labels for filters and totals
+        self.lblStudent = QtWidgets.QLabel("Filter by Student ID", self.tab_2)
+        self.lblStudent.setGeometry(QtCore.QRect(670, 20, 150, 20))
+        self.lblCRN = QtWidgets.QLabel("Filter by CRN", self.tab_2)
+        self.lblCRN.setGeometry(QtCore.QRect(670, 80, 150, 20))
+        self.lblCourseName = QtWidgets.QLabel("Filter by Course Name", self.tab_2)
+        self.lblCourseName.setGeometry(QtCore.QRect(670, 140, 150, 20))
+        self.lblDay = QtWidgets.QLabel("Sort by Day/Week/Month", self.tab_2)
+        self.lblDay.setGeometry(QtCore.QRect(670, 200, 150, 20))
+        self.lblTotPresent = QtWidgets.QLabel("Total Present:", self.tab_2)
+        self.lblTotPresent.setGeometry(QtCore.QRect(670, 280, 150, 20))
+        self.lblTotAbsent = QtWidgets.QLabel("Total Absent:", self.tab_2)
+        self.lblTotAbsent.setGeometry(QtCore.QRect(670, 310, 150, 20))
+
         # Filters
         self.cmbStudentID = QtWidgets.QComboBox(self.tab_2)
         self.cmbStudentID.setGeometry(QtCore.QRect(670, 40, 150, 22))
@@ -101,12 +115,12 @@ class Ui_Dialog(object):
         cursor.execute("SELECT DISTINCT Student_ID FROM students")
         self.cmbStudentID.clear()
         self.cmbStudentID.addItem("")
-        self.cmbStudentID.addItems([row[0] for row in cursor])
+        self.cmbStudentID.addItems([str(row[0]) for row in cursor])
 
         cursor.execute("SELECT DISTINCT CRN FROM courses")
         self.cmbCRN.clear()
         self.cmbCRN.addItem("")
-        self.cmbCRN.addItems([row[0] for row in cursor])
+        self.cmbCRN.addItems([str(row[0]) for row in cursor])
 
         cursor.execute("SELECT DISTINCT course_name FROM courses")
         self.cmbCourseName.clear()
@@ -166,18 +180,16 @@ class Ui_Dialog(object):
         filters = []
         values = []
 
-        if student_id:
+        if student_id and student_id.isdigit():
             filters.append("s.Student_ID = %s")
-            values.append(student_id)
-        if crn:
+            values.append(int(student_id))
+        if crn and crn.isdigit():
             filters.append("c.CRN = %s")
-            values.append(crn)
+            values.append(int(crn))
         if course_name:
             filters.append("c.course_name = %s")
             values.append(course_name)
-        if self.dateEditStart.date() <= self.dateEditEnd.date():
-            filters.append("a.Date_of_attendance BETWEEN %s AND %s")
-            values.extend([start_date, end_date])
+
 
         query = base_query + (" AND " + " AND ".join(filters) if filters else "")
         cursor.execute(query, values)
