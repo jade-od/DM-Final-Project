@@ -320,7 +320,7 @@ class Ui_Dialog(object):
 #############################################################################
     def connect(self):                                                      #
         self.cnx = mysql.connector.connect(user = 'root',                   #
-                                        password = 'quinnfricko',           #
+                                        password = '123456789',           #
                                         host = '127.0.0.1',                 #    
                                         database = 'AttendanceTracker')     #   
 #############################################################################
