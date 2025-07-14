@@ -23,7 +23,6 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(849, 625)
 
-        # Create tab widget
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 811, 551))
 
@@ -100,7 +99,6 @@ class Ui_Dialog(object):
         self.initialSetup()
 
     def initialSetup(self):
-        # Initialize button events and DB
         self.SetUpEventsTab1()
         self.SetUpEventsTab2()
         self.setupDatabase()
@@ -109,7 +107,6 @@ class Ui_Dialog(object):
         self.refreshTbl2()
 
     def populateFilters(self):
-        # Populate combo boxes with unique values from DB
         cursor = self.cnx.cursor()
 
         cursor.execute("SELECT DISTINCT Student_ID FROM students")
@@ -137,7 +134,6 @@ class Ui_Dialog(object):
         self.btnInfo.clicked.connect(self.btnInfo_clicked)
 
     def btnInfo_clicked(self):
-        # Pop up input dialog and insert values
         Dialog = QtWidgets.QDialog()
         form = InputPopup.Ui_Dialog()
         form.setupUi(Dialog, None)
@@ -150,7 +146,6 @@ class Ui_Dialog(object):
             self.insert_attendance((values[0], values[4], values[7], values[6]))
             self.refreshTbl1()
             self.refreshTbl2()
-            self.populateFilters()
 
     #########################################################
     #                   Events FOR TAB 2                    #
@@ -161,7 +156,6 @@ class Ui_Dialog(object):
         self.btnClear.clicked.connect(self.clearFilters)
 
     def filterReportTab(self):
-        # Filter data based on user selections
         student_id = self.cmbStudentID.currentText()
         crn = self.cmbCRN.currentText()
         course_name = self.cmbCourseName.currentText()
@@ -171,13 +165,19 @@ class Ui_Dialog(object):
         cursor = self.cnx.cursor()
 
         base_query = """
-            SELECT s.Student_ID, s.Student_First_name, s.Student_last_name, c.CRN,
-                   c.course_name, a.Date_of_attendance, c.start_end_time, a.Attended
-            FROM attendance a
-            LEFT JOIN students s ON a.Student_ID = s.Student_ID
-            LEFT JOIN courses c ON a.CRN = c.CRN
-            WHERE 1=1
-        """
+                     SELECT s.Student_ID, \
+                            s.Student_First_name, \
+                            s.Student_last_name, \
+                            c.CRN,
+                            c.course_name, \
+                            a.Date_of_attendance, \
+                            c.start_end_time, \
+                            a.Attended
+                     FROM attendance a
+                              LEFT JOIN students s ON a.Student_ID = s.Student_ID
+                              LEFT JOIN courses c ON a.CRN = c.CRN
+                     WHERE 1 = 1 \
+                     """
         filters = []
         values = []
 
@@ -190,7 +190,10 @@ class Ui_Dialog(object):
         if course_name:
             filters.append("c.course_name = %s")
             values.append(course_name)
-
+        if start_date and end_date:
+            filters.append("a.Date_of_attendance BETWEEN %s AND %s")
+            values.append(start_date)
+            values.append(end_date)
 
         query = base_query + (" AND " + " AND ".join(filters) if filters else "")
         cursor.execute(query, values)
@@ -203,24 +206,16 @@ class Ui_Dialog(object):
             self.tblAttendance_2.insertRow(rowCount)
             for col, val in enumerate(row):
                 self.tblAttendance_2.setItem(rowCount, col, QTableWidgetItem(str(val)))
-
-            if row[7] and isinstance(row[7], str):
-                attended_value = row[7].strip().lower()
-                if attended_value in ["present", "yes"]:
-                    total_present += 1
-                elif attended_value in ["absent", "no"]:
-                    total_absent += 1
-
-
-
-
+            if str(row[7]).lower() == "present":
+                total_present += 1
+            elif str(row[7]).lower() == "absent":
+                total_absent += 1
 
         self.totPresentLineEdit.setText(str(total_present))
         self.totAbsentlineEdit.setText(str(total_absent))
         cursor.close()
 
     def clearFilters(self):
-        # Clear filter selections and refresh table
         self.cmbStudentID.setCurrentIndex(0)
         self.cmbCRN.setCurrentIndex(0)
         self.cmbCourseName.setCurrentIndex(0)
@@ -238,7 +233,6 @@ class Ui_Dialog(object):
         self.cnx = mysql.connector.connect(user='root', password='123456789', host='127.0.0.1', database='AttendanceTracker')
 
     def refreshTbl1(self):
-        # Refresh first table with raw attendance
         self.tblAttendance.setRowCount(0)
         cursor = self.cnx.cursor()
         cursor.execute("SELECT Student_ID, CRN, Date_of_attendance, Attended FROM attendance")
@@ -250,7 +244,6 @@ class Ui_Dialog(object):
         cursor.close()
 
     def refreshTbl2(self):
-        # Refresh full report table
         self.tblAttendance_2.setRowCount(0)
         cursor = self.cnx.cursor()
         query = """
@@ -302,7 +295,7 @@ class Ui_Dialog(object):
         cursor.execute(query, attendance_data + (attendance_data[3],))
         self.cnx.commit()
         cursor.close()
-
+#hiiii
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
