@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from AttendanceTracker import Ui_Dialog as AttendanceTrackerDialog
 
 
 class Ui_MainWindow(object):
@@ -77,6 +78,17 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        #connects button to attendance tracker dialog
+        self.btnEnter.clicked.connect(self.openAttendanceTracker)
+        
+
+    def openAttendanceTracker(self):
+        self.trackerWindow = QtWidgets.QDialog()
+        self.trackerUI = AttendanceTrackerDialog()
+        self.trackerUI.setupUi(self.trackerWindow)
+        self.trackerWindow.exec_()
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
