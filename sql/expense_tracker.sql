@@ -17,7 +17,7 @@ CREATE TABLE attendance
 	( CRN INT NOT NULL, 
 	Student_id INT NOT NULL, 
 Date_of_attendance DATE NOT NULL,
-Attended varchar(3), 
+Attended varchar(10), 
 CONSTRAINT attendance_pk PRIMARY KEY (CRN, Student_ID, Date_of_attendance), 
 CONSTRAINT attendance_fk1 FOREIGN KEY (CRN) REFERENCES courses(CRN), 
 CONSTRAINT attendance_fk2 FOREIGN KEY (Student_ID) REFERENCES Students(Student_ID));
